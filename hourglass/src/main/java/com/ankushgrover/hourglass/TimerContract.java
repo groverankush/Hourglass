@@ -2,7 +2,7 @@ package com.ankushgrover.hourglass;
 
 
 /**
- * Created by Ankush Grover(ankush.grover@finoit.co.in) on 21/12/17.
+ * Created by Ankush Grover(ankush.dev2@gmail.com) on 21/12/17.
  */
 
 public interface TimerContract {
@@ -11,14 +11,14 @@ public interface TimerContract {
     interface TimerTick {
 
         /**
-         * Method to be called every second by the {@link TimerThread}
+         * Method to be called every second by the {@link HourGlass}
          *
          * @param timeRemaining
          */
         void onTimerTick(long timeRemaining);
 
         /**
-         * Method to be called by {@link TimerThread} when the thread is getting  finished
+         * Method to be called by {@link HourGlass} when the thread is getting  finished
          */
         void onTimerFinish();
 

@@ -1,12 +1,17 @@
 package com.ankushgrover.hourglass;
 
+import android.os.Handler;
+import android.os.Looper;
+
+
 /**
- * Created by Ankush Grover(ankush.grover@finoit.co.in) on 21/12/17.
+ * Created by Ankush Grover(ankush.dev2@gmail.com) on 21/12/17.
  */
 
 
-public class TimerThread extends Thread {
+public abstract class HourGlass extends Thread implements TimerContract.TimerTick {
 
+    private final Handler handler;
     /**
      * To maintain Timer start and stop status.
      */
@@ -20,13 +25,14 @@ public class TimerThread extends Thread {
      * Timer time.
      */
     private long time;
+    private long localTime;
+
+    public HourGlass(long time) {
 
 
-    private TimerContract.TimerTick link;
-
-    public TimerThread(long time,  TimerContract.TimerTick link) {
-
-        this.link = link;
+        this.time = time;
+        this.handler = new Handler(Looper.getMainLooper());
+        startTimer();
 
     }
 
@@ -35,13 +41,19 @@ public class TimerThread extends Thread {
         super.run();
 
         this.isRunning = true;
-        long localTime = 0;
+         localTime = 0;
 
         while (!isInterrupted() && localTime < time) {
 
 
-            if (link != null && !isPaused)
-                link.onTimerTick(time - localTime);
+            if (!isPaused){
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onTimerTick(time - localTime);                    }
+                });
+            }
+
 
             try {
                 Thread.sleep(1000);
@@ -53,8 +65,15 @@ public class TimerThread extends Thread {
             }
 
 
+
         }
-        link.onTimerFinish();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                onTimerFinish();
+            }
+        });
+
         this.isRunning = false;
 
 
@@ -111,7 +130,7 @@ public class TimerThread extends Thread {
      * @param time
      */
     public void setTime(long time) {
-        if (this.time == 0)
+        if (this.time <= 0)
             if (time < 0)
                 time *= -1;
         this.time = time;
