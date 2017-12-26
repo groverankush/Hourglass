@@ -10,7 +10,7 @@ import android.util.Log;
  */
 
 
-public abstract class HourGlass extends Thread implements TimerContract.TimerTick {
+public abstract class Hourglass extends Thread implements TimerContract.TimerTick {
 
     private static final int INTERVAL = 1000;
 
@@ -32,15 +32,15 @@ public abstract class HourGlass extends Thread implements TimerContract.TimerTic
     private long localTime;
     private long interval;
 
-    public HourGlass() {
+    public Hourglass() {
         init(0, INTERVAL);
     }
 
-    public HourGlass(long time) {
+    public Hourglass(long time) {
         init(time, INTERVAL);
     }
 
-    public HourGlass(long time, long interval) {
+    public Hourglass(long time, long interval) {
         init(time, interval);
     }
 

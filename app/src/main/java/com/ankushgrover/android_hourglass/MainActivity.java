@@ -8,14 +8,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ankushgrover.hourglass.HourGlass;
+import com.ankushgrover.hourglass.Hourglass;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private TextView text;
-    private HourGlass timer;
+    private Hourglass timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.pause).setOnClickListener(this);
 
 
-        timer = new HourGlass() {
+        timer = new Hourglass() {
             @Override
             public void onTimerTick(final long timeRemaining) {
                 text.setText(String.valueOf(timeRemaining ));

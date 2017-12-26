@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 
 
 ext {
-    bintrayRepo = 'HourGlass'
-    bintrayName = 'HourGlass'
+    bintrayRepo = 'Hourglass'
+    bintrayName = 'Hourglass'
 
     publishedGroupId = 'com.ankushgrover'
-    libraryName = 'HourGlass'
-    artifact = 'HourGlass'
+    libraryName = 'Hourglass'
+    artifact = 'Hourglass'
 
     libraryDescription = 'Hourglass is a Countdown timer that provides the feature to pause and resume the timer.'
 

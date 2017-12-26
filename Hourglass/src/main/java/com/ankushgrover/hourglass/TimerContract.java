@@ -11,14 +11,14 @@ public interface TimerContract {
     interface TimerTick {
 
         /**
-         * Method to be called every second by the {@link HourGlass}
+         * Method to be called every second by the {@link Hourglass}
          *
          * @param timeRemaining
          */
         void onTimerTick(long timeRemaining);
 
         /**
-         * Method to be called by {@link HourGlass} when the thread is getting  finished
+         * Method to be called by {@link Hourglass} when the thread is getting  finished
          */
         void onTimerFinish();
 
