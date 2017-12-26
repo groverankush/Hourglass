@@ -63,6 +63,7 @@ public abstract class Hourglass extends Thread implements TimerContract.TimerTic
         super.run();
 
         this.isRunning = true;
+        this.isPaused = false;
         localTime = 0;
 
         while (!isInterrupted() && localTime < time) {
