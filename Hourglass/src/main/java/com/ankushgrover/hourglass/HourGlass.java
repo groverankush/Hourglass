@@ -162,10 +162,16 @@ public abstract class HourGlass extends Thread implements TimerContract.TimerTic
         this.isPaused = isPaused;
     }
 
+    /**
+     * Convenience method to pause the timer.
+     */
     public synchronized void pauseTimer() {
         setPaused(true);
     }
 
+    /**
+     * Convenience method to resume the timer.
+     */
     public synchronized void resumeTimer() {
         setPaused(false);
     }

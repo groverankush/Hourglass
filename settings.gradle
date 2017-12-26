@@ -1,1 +1,1 @@
-include ':app', ':hourglass'
+include ':app', ':Hourglass'
