@@ -2,6 +2,7 @@ package com.ankushgrover.hourglass;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 
 /**
@@ -11,7 +12,10 @@ import android.os.Looper;
 
 public abstract class HourGlass extends Thread implements TimerContract.TimerTick {
 
-    private final Handler handler;
+    private static final int INTERVAL = 1000;
+
+    private Handler handler;
+
     /**
      * To maintain Timer start and stop status.
      */
@@ -26,44 +30,63 @@ public abstract class HourGlass extends Thread implements TimerContract.TimerTic
      */
     private long time;
     private long localTime;
+    private long interval;
+
+    public HourGlass() {
+        init(0, INTERVAL);
+    }
 
     public HourGlass(long time) {
-
-
-        this.time = time;
-        this.handler = new Handler(Looper.getMainLooper());
-        startTimer();
-
+        init(time, INTERVAL);
     }
+
+    public HourGlass(long time, long interval) {
+        init(time, interval);
+    }
+
+    /**
+     * Method to initialize HourGlass.
+     *
+     * @param time
+     * @param interval
+     */
+    private void init(long time, long interval) {
+        setTime(time);
+        setInterval(interval);
+
+        this.handler = new Handler(Looper.getMainLooper());
+    }
+
 
     @Override
     public void run() {
         super.run();
 
         this.isRunning = true;
-         localTime = 0;
+        localTime = 0;
 
         while (!isInterrupted() && localTime < time) {
 
 
-            if (!isPaused){
+            if (!isPaused) {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        onTimerTick(time - localTime);                    }
+                        onTimerTick(time - localTime);
+                    }
                 });
             }
 
 
             try {
-                Thread.sleep(1000);
+                Log.d("Interval", interval + "");
+                Thread.sleep(interval);
                 if (!isPaused)
-                    localTime += 1000;
+                    localTime += interval;
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
             }
-
 
 
         }
@@ -88,22 +111,37 @@ public abstract class HourGlass extends Thread implements TimerContract.TimerTic
         return isRunning;
     }
 
+
+    /**
+     * To stop the timer from Main thread.
+     *
+     * @param isRunning
+     */
+    private synchronized void setRunning(boolean isRunning) {
+        this.isRunning = isRunning;
+
+        if (this.isRunning) {
+            start();
+        }
+
+        if (!this.isRunning) {
+            interrupt();
+        }
+    }
+
     /**
      * Method to start the timer.
      */
     public void startTimer() {
-        if (!this.isRunning) {
-            start();
-        }
+
+        setRunning(true);
     }
 
     /**
      * Method to stop the timer.
      */
     public void stopTimer() {
-        if (!this.isRunning) {
-            interrupt();
-        }
+        setRunning(false);
     }
 
     /**
@@ -120,8 +158,16 @@ public abstract class HourGlass extends Thread implements TimerContract.TimerTic
      *
      * @param isPaused
      */
-    public synchronized void setPaused(boolean isPaused) {
+    private synchronized void setPaused(boolean isPaused) {
         this.isPaused = isPaused;
+    }
+
+    public synchronized void pauseTimer() {
+        setPaused(true);
+    }
+
+    public synchronized void resumeTimer() {
+        setPaused(false);
     }
 
     /**
@@ -130,9 +176,27 @@ public abstract class HourGlass extends Thread implements TimerContract.TimerTic
      * @param time
      */
     public void setTime(long time) {
+        if (isRunning)
+            return;
+
         if (this.time <= 0)
             if (time < 0)
                 time *= -1;
         this.time = time;
+    }
+
+    /**
+     * Setter for interval.
+     *
+     * @param interval
+     */
+    public void setInterval(long interval) {
+        if (isRunning)
+            return;
+
+        if (this.interval <= 0)
+            if (interval < 0)
+                interval *= -1;
+        this.interval = interval;
     }
 }
