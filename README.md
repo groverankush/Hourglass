@@ -5,15 +5,14 @@
 
 
 
-Android-Hourglass is a Countdown timer that provides the feature to pause and resume the timer. The module is loaded with convenience methods to get a way through timers.
+Hourglass is a Countdown timer that provides the feature to pause and resume the timer. The module is loaded with convenience methods to get a way through timers.
 
-
-<img src="https://github.com/groverankush/Hourglass/tree/master/media/hourglass_demo.gif" width="250"/>
+<img src="https://github.com/groverankush/Hourglass/tree/master/media/hourglass_demo.gif"/>
 
 
 ## Getting Started
 
-These are the all the instructions you need to use SuperLog in your apps.
+These are the all the instructions you need to use `Hourglass` in your apps.
 
 ### Compile
 
@@ -31,20 +30,30 @@ Adding this line will enable you to use every feature `Hourglass` has.
 Just initialize an object of `Hourglass`. The class is loaded with a lot of convinience methods to handle various actions. Some of them are listed below:
 
 * Three constructors for initializing
-        * public Hourglass()       //default interval is 1 second
-        * public Hourglass(time)   //default interval is 1 second 
-        * public Hourglass(time, interval)
+```          
+        public Hourglass()       //default interval is 1 second
+        public Hourglass(time)   //default interval is 1 second 
+        public Hourglass(time, interval)  
+```
+
 * Convineince methods to manage timer
-        * `public void startTimer()`
-        * `public void stopTimer()`
-        * `public void pauseTimer()`
-        * `public void resumeTimer()`
+```
+        public void startTimer()
+        public void stopTimer()
+        public void pauseTimer()
+        public void resumeTimer()
+```
 * Abstract methods for updating UI
-        * `public void onTimerTick() `
-        * `public void onTimerFinish() `
+```
+        public void onTimerTick(long timeRemaining)    // Called after every interval.
+        public void onTimerFinish()                    // Called when time specified finishes 
+```
+   
 * Setters for setting time and interval
-        * `public void setTime()`
-        * `public void setInterval()`
+```
+        public void setTime(long time)
+        public void setInterval(long interval)
+```
         
         
 ### Examples
@@ -55,12 +64,16 @@ Here is an example:
         Hourglass hourglass = new Hourglass(50000, 1000) {
             @Override
             public void onTimerTick(long timeRemaining) {
-                Log.d("Hourglass", String.valueOf(timeRemaining));
+                // Update UI
+                Toast.show(MainActivity.this, String.valueOf(timeRemaining), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onTimerFinish() {
-                Log.d("Hourglass", "Timer finish.");
+                // Timer finished
+                Toast.show(MainActivity.this, "Timer finished", Toast.LENGTH_SHORT).show();
+
+
             }
         };
 
