@@ -7,7 +7,7 @@
 
 Hourglass is a Countdown timer that provides the feature to pause and resume the timer. The module is loaded with convenience methods to get a way through timers.
 
-<img src="https://github.com/groverankush/Hourglass/tree/master/media/hourglass_demo.gif"/>
+<img src="https://github.com/groverankush/Hourglass/tree/master/pictures/hourglass_demo.gif" width="250"/>
 
 
 ## Getting Started
