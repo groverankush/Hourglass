@@ -2,7 +2,6 @@ package com.ankushgrover.hourglass;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 
 /**
@@ -10,7 +9,7 @@ import android.util.Log;
  */
 
 
-public abstract class Hourglass extends Thread implements TimerContract.TimerTick {
+public abstract class Hourglass implements TimerContract.TimerTick {
 
     private static final int INTERVAL = 1000;
 
@@ -31,6 +30,7 @@ public abstract class Hourglass extends Thread implements TimerContract.TimerTic
     private long time;
     private long localTime;
     private long interval;
+    private Thread timer;
 
     public Hourglass() {
         init(0, INTERVAL);
@@ -55,57 +55,59 @@ public abstract class Hourglass extends Thread implements TimerContract.TimerTic
         setInterval(interval);
 
         this.handler = new Handler(Looper.getMainLooper());
+
+        initializeThread();
     }
 
+    /**
+     * Method to initialize a thread.
+     */
+    private void initializeThread() {
+        timer = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                isRunning = true;
+                isPaused = false;
+                localTime = 0;
 
-    @Override
-    public void run() {
-        super.run();
+                while (!timer.isInterrupted() && localTime < time) {
 
-        this.isRunning = true;
-        this.isPaused = false;
-        localTime = 0;
+                    if (!isPaused) {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onTimerTick(time - localTime);
+                            }
+                        });
+                    }
 
-        while (!isInterrupted() && localTime < time) {
+                    try {
+                        Thread.sleep(interval);
+                        if (!isPaused)
+                            localTime += interval;
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
 
-            Log.d("In Loop", "***********88");
 
-            if (!isPaused) {
+                }
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        onTimerTick(time - localTime);
+                        onTimerFinish();
                     }
                 });
-            }
 
-
-            try {
-                Log.d("Interval", interval + "");
-                Thread.sleep(interval);
-                if (!isPaused)
-                    localTime += interval;
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
-
-
-        }
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                onTimerFinish();
+                isRunning = false;
             }
         });
-
-        this.isRunning = false;
 
 
     }
 
     /**
-     * Method to check whether the timer is running or not
+     * Convenience method to check whether the timer is running or not
      *
      * @return
      */
@@ -123,11 +125,11 @@ public abstract class Hourglass extends Thread implements TimerContract.TimerTic
         this.isRunning = isRunning;
 
         if (this.isRunning) {
-            start();
+            timer.start();
         }
 
         if (!this.isRunning) {
-            interrupt();
+            timer.interrupt();
         }
     }
 
