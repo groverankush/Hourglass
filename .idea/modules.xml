@@ -3,8 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Android-Hourglass.iml" filepath="$PROJECT_DIR$/Android-Hourglass.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Hourglass/hourglass.iml" filepath="$PROJECT_DIR$/Hourglass/hourglass.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Hourglass/Hourglass.iml" filepath="$PROJECT_DIR$/Hourglass/Hourglass.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+<!--
+      <module fileurl="file://$PROJECT_DIR$/Hourglass/hourglass.iml" filepath="$PROJECT_DIR$/Hourglass/hourglass.iml" />
+-->
     </modules>
   </component>
 </project>
