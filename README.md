@@ -1,7 +1,8 @@
 # Hourglass
 
-[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/groverankush/SuperLog)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/groverankush/SuperLog/blob/master/LICENSE)
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/groverankush/Hourglass)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 
 Android-Hourglass is a Countdown timer that provides the feature to pause and resume the timer. The module is loaded with convenience methods to get a way through timers.
@@ -30,9 +31,9 @@ Adding this line will enable you to use every feature `Hourglass` has.
 Just initialize an object of `Hourglass`. The class is loaded with a lot of convinience methods to handle various actions. Some of them are listed below:
 
 * Three constructors for initializing
-        * `public Hourglass()       //default interval is 1 second`
-        * `public Hourglass(time)   //default interval is 1 second` 
-        * `public Hourglass(time, interval)`
+        * public Hourglass()       //default interval is 1 second
+        * public Hourglass(time)   //default interval is 1 second 
+        * public Hourglass(time, interval)
 * Convineince methods to manage timer
         * `public void startTimer()`
         * `public void stopTimer()`
@@ -78,5 +79,5 @@ Here is an example:
 
 ## License
 
-This project is licensed under MIT License, - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under MIT License, - see the [LICENSE.md](https://github.com/groverankush/Hourglass/blob/master/LICENSE) file for details
 
