@@ -68,6 +68,7 @@ public abstract class Hourglass extends Thread implements TimerContract.TimerTic
 
         while (!isInterrupted() && localTime < time) {
 
+            Log.d("In Loop", "***********88");
 
             if (!isPaused) {
                 handler.post(new Runnable() {
