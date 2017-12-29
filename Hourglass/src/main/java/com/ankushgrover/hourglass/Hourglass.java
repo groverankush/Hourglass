@@ -1,7 +1,8 @@
 package com.ankushgrover.hourglass;
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
-import android.os.Looper;
+import android.os.Message;
 
 
 /**
@@ -9,11 +10,10 @@ import android.os.Looper;
  */
 
 
-public abstract class Hourglass implements TimerContract.TimerTick {
+public abstract class Hourglass implements HourglassListener {
 
     private static final int INTERVAL = 1000;
-
-    private Handler handler;
+    private static final int MSG = 1;
 
     /**
      * To maintain Timer start and stop status.
@@ -30,137 +30,104 @@ public abstract class Hourglass implements TimerContract.TimerTick {
     private long time;
     private long localTime;
     private long interval;
-    private Thread timer;
+    private Handler handler;
 
     public Hourglass() {
         init(0, INTERVAL);
     }
 
-    public Hourglass(long time) {
-        init(time, INTERVAL);
+    public Hourglass(long timeInMillis) {
+        init(timeInMillis, INTERVAL);
     }
 
-    public Hourglass(long time, long interval) {
-        init(time, interval);
+    public Hourglass(long timeInMillis, long intervalInMillis) {
+        init(timeInMillis, intervalInMillis);
     }
 
     /**
      * Method to initialize HourGlass.
      *
-     * @param time
-     * @param interval
+     * @param time:     Time in milliseconds.
+     * @param interval: in milliseconds.
      */
     private void init(long time, long interval) {
         setTime(time);
         setInterval(interval);
 
-        this.handler = new Handler(Looper.getMainLooper());
 
-        initializeThread();
+        initHourglass();
     }
 
-    /**
-     * Method to initialize a thread.
-     */
-    private void initializeThread() {
-        timer = new Thread(new Runnable() {
+    @SuppressLint("HandlerLeak")
+    private void initHourglass() {
+
+        handler = new Handler() {
             @Override
-            public void run() {
-                isRunning = true;
-                isPaused = false;
-                localTime = 0;
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
 
-                while (!timer.isInterrupted() && localTime < time) {
-
+                if (msg.what == MSG) {
                     if (!isPaused) {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                onTimerTick(time - localTime);
-                            }
-                        });
-                    }
 
-                    try {
-                        Thread.sleep(interval);
-                        if (!isPaused)
+                        if (localTime <= time) {
+                            onTimerTick(time - localTime);
                             localTime += interval;
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        break;
+                            sendMessageDelayed(handler.obtainMessage(MSG), interval);
+                        } else stopTimer();
+
                     }
-
-
                 }
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        onTimerFinish();
-                    }
-                });
-
-                isRunning = false;
             }
-        });
-
-
+        };
     }
 
     /**
      * Convenience method to check whether the timer is running or not
      *
-     * @return
+     * @return: true if timer is running, else false.
      */
     public boolean isRunning() {
         return isRunning;
-    }
-
-
-    /**
-     * To stop the timer from Main thread.
-     *
-     * @param isRunning
-     */
-    private synchronized void setRunning(boolean isRunning) {
-        this.isRunning = isRunning;
-
-        if (this.isRunning) {
-            timer.start();
-        }
-
-        if (!this.isRunning) {
-            timer.interrupt();
-        }
     }
 
     /**
      * Method to start the timer.
      */
     public void startTimer() {
+        if (isRunning)
+            return;
 
-        setRunning(true);
+
+        isRunning = true;
+        isPaused = false;
+        localTime = 0;
+        handler.sendMessage(handler.obtainMessage(MSG));
     }
 
     /**
      * Method to stop the timer.
      */
     public void stopTimer() {
-        setRunning(false);
+
+        isRunning = false;
+        handler.removeMessages(MSG);
+        onTimerFinish();
+
     }
 
     /**
      * Method to check whether the timer is paused.
      *
-     * @return
+     * @return: true if timer is paused else false.
      */
-    public boolean isPaused() {
+    public synchronized boolean isPaused() {
         return isPaused;
     }
 
     /**
      * To pause the timer from Main thread.
      *
-     * @param isPaused
+     * @param isPaused: true to pause the timer, false to resume.
      */
     private synchronized void setPaused(boolean isPaused) {
         this.isPaused = isPaused;
@@ -178,35 +145,37 @@ public abstract class Hourglass implements TimerContract.TimerTick {
      */
     public synchronized void resumeTimer() {
         setPaused(false);
+
+        handler.sendMessage(handler.obtainMessage(MSG));
     }
 
     /**
      * Setter for Time.
      *
-     * @param time
+     * @param timeInMillis: in milliseconds
      */
-    public void setTime(long time) {
+    public void setTime(long timeInMillis) {
         if (isRunning)
             return;
 
         if (this.time <= 0)
-            if (time < 0)
-                time *= -1;
-        this.time = time;
+            if (timeInMillis < 0)
+                timeInMillis *= -1;
+        this.time = timeInMillis;
     }
 
     /**
      * Setter for interval.
      *
-     * @param interval
+     * @param intervalInMillis: in milliseconds
      */
-    public void setInterval(long interval) {
+    public void setInterval(long intervalInMillis) {
         if (isRunning)
             return;
 
         if (this.interval <= 0)
-            if (interval < 0)
-                interval *= -1;
-        this.interval = interval;
+            if (intervalInMillis < 0)
+                intervalInMillis *= -1;
+        this.interval = intervalInMillis;
     }
 }

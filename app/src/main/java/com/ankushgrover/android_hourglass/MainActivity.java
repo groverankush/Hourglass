@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         timer = new Hourglass() {
             @Override
             public void onTimerTick(final long timeRemaining) {
-                text.setText(String.valueOf(timeRemaining ));
+                text.setText(String.valueOf(timeRemaining));
             }
 
             @Override

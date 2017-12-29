@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/groverankush/Android-Hourglass'
     gitUrl = 'https://github.com/groverankush/Android-Hourglass.git'
 
-    libraryVersion = '1.0.0'
+    libraryVersion = '2.0.0'
 
     developerId = 'ankushgrover'
     developerName = 'Ankush Grover'
