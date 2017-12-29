@@ -17,10 +17,16 @@ These are the all the instructions you need to use `Hourglass` in your apps.
 
 ### Compile
 
-Just a simple debug `compile` will get you up and running with SuperLog.
+Just a simple `implementation` will get you up and running with Hourglass.
 
 ```
-compile 'com.ankushgrover:Hourglass:1.0.0'
+implementation 'com.ankushgrover:Hourglass:2.0.0'
+```
+
+OR
+
+```
+compile 'com.ankushgrover:Hourglass:2.0.0'
 ```
 
 Adding this line will enable you to use every feature `Hourglass` has.
@@ -77,6 +83,8 @@ Here is an example:
 
             }
         };
+        
+        hourglass.startTimer();
 
 ```
 
