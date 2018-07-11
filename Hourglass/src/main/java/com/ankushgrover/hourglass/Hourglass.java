@@ -165,6 +165,17 @@ public abstract class Hourglass implements HourglassListener {
     }
 
     /**
+     * @return remaining time
+     */
+    public long getRemainingTime() {
+        if(isRunning) {
+            return this.time;
+        }
+
+        return 0;
+    }
+
+    /**
      * Setter for interval.
      *
      * @param intervalInMillis: in milliseconds
